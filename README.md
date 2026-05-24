@@ -133,8 +133,8 @@
 
 - <b>Node.js</b> 18+ (recommended: 20 LTS)
 - <b>MongoDB Atlas</b> account (free tier works)
-- <b>OpenRouter</b> API key (<a href="https://openrouter.ai/keys">get one free</a>)
-- <b>Google OAuth</b> client ID (<a href="https://console.cloud.google.com/apis/credentials">create here</a>)
+- <b>OpenRouter</b> API key 
+- <b>Google OAuth</b> client ID
 
 <h3> Installation</h3>
 
