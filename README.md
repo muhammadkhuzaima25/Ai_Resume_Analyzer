@@ -9,7 +9,7 @@
 <h1 align="center">ResuMatch<span style="color:#6366f1">.ai</span></h1>
 
 <p align="center">
-  <strong>AI-Powered ATS Resume Analyzer — Smart, Fair, Recruiter-Ready</strong>
+  <strong>AI-Powered ATS Resume Analyzer — Smart, Fair</strong>
 </p>
 
 <p align="center">
