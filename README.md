@@ -120,7 +120,7 @@
 <h2> UI / UX Preview</h2>
 
 <p align="center">
-  <img src="./frontend/src/assets/hero.png" alt="ResuMatch.ai Dashboard Preview" width="85%" style="border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
+  <img src="https://raw.githubusercontent.com/muhammadkhuzaima25/Ai_Resume_Analyzer/main/frontend/src/assets/hero.png" alt="ResuMatch.ai Dashboard Preview" width="85%" style="border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
 </p>
 
 <br>
