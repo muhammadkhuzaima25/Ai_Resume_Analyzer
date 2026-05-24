@@ -256,7 +256,7 @@ resumatch-analyzer/
 <h2> License</h2>
 
 <p>
-  <strong>All Rights Reserved.</strong> Copyright © 2024–2026 Muhammad Khuzaima.
+  <strong>All Rights Reserved.</strong> Copyright © 2026 Muhammad Khuzaima.
 </p>
 <p>
   This project is provided for <strong>viewing and evaluation</strong> purposes only.
@@ -266,10 +266,4 @@ resumatch-analyzer/
 
 <br>
 
----
 
-<p align="center">
-  <sub>Built with ❤️ for recruiters who value fairness, transparency, and clean code.</sub>
-  <br>
-  <sub>ResuMatch.ai — <b>Your Resume. Matched. Fairly.</b></sub>
-</p>
