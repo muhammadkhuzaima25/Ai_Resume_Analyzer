@@ -120,13 +120,7 @@
 <h2> UI / UX Preview</h2>
 
 <p align="center">
-  <em>Add a screenshot of your dashboard here for a premium showcase.</em>
-  <br><br>
-  <a href="#">
-    <img src="./frontend/src/assets/hero.png" alt="ResuMatch.ai Dashboard Preview" width="85%" style="border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-  </a>
-  <br><br>
-  <sub><code>./frontend/src/assets/hero.png</code> — Replace with your dashboard mockup for the full premium look.</sub>
+  <img src="./frontend/src/assets/hero.png" alt="ResuMatch.ai Dashboard Preview" width="85%" style="border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
 </p>
 
 <br>
