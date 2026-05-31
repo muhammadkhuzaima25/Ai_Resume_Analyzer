@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://resumatchai-three.vercel.app',
+        target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },
