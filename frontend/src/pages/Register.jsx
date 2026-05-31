@@ -126,7 +126,7 @@ const Register = () => {
       window.dispatchEvent(new Event('storage'));
       navigate('/analyze', { replace: true });
     } catch (err) {
-      recaptchaRef.current.reset();
+      if (recaptchaRef.current) recaptchaRef.current.reset();
       setCaptchaToken(null);
       try {
         let message = 'Registration failed. Please try again.';
