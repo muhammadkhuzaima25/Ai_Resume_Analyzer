@@ -12,34 +12,25 @@ app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
-// Root health check (no DB needed)
 app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'ResuMatch API is running' });
 });
 
-const connectDB = require('./config/db');
+let isConnected = false;
 
-// Connect to DB on startup
-connectDB()
-  .then(() => {
-    console.log('Database connection established on startup');
-  })
-  .catch((err) => {
-    console.error('Startup database connection failed:', err.message);
-  });
+async function connectToMongoDB() {
+  if (isConnected && mongoose.connection.readyState === 1) return;
+  const connectDB = require('./config/db');
+  await connectDB();
+  isConnected = true;
+}
 
-// DB connection middleware - retry on first request if startup failed
-let dbConnected = false;
 app.use('/api', async (req, res, next) => {
-  if (dbConnected && mongoose.connection.readyState === 1) {
-    return next();
-  }
   try {
-    await connectDB();
-    dbConnected = true;
+    await connectToMongoDB();
     next();
   } catch (err) {
-    dbConnected = false;
+    isConnected = false;
     const msg = err.message.includes('Authentication')
       ? 'Database authentication failed. Check credentials.'
       : err.message.includes('whitelist')
@@ -68,30 +59,34 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`API: http://localhost:${PORT}/api`);
-});
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`API: http://localhost:${PORT}/api`);
+  });
 
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use. Kill the existing process or use a different PORT.`);
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use. Kill the existing process or use a different PORT.`);
+      process.exit(1);
+    }
+    console.error('Server error:', err.message);
     process.exit(1);
-  }
-  console.error('Server error:', err.message);
-  process.exit(1);
-});
+  });
 
-async function handleShutdown() {
-  console.log('Shutting down gracefully...');
-  await new Promise((resolve) => server.close(resolve));
-  console.log('HTTP server closed.');
-  const { gracefulShutdown } = require('./config/db');
-  await gracefulShutdown();
-  console.log('Cleanup complete. Exiting.');
-  process.exit(0);
+  async function handleShutdown() {
+    console.log('Shutting down gracefully...');
+    await new Promise((resolve) => server.close(resolve));
+    console.log('HTTP server closed.');
+    const { gracefulShutdown } = require('./config/db');
+    await gracefulShutdown();
+    console.log('Cleanup complete. Exiting.');
+    process.exit(0);
+  }
+
+  process.on('SIGINT', handleShutdown);
+  process.on('SIGTERM', handleShutdown);
 }
 
-process.on('SIGINT', handleShutdown);
-process.on('SIGTERM', handleShutdown);
+module.exports = app;
