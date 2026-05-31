@@ -1,5 +1,5 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const { PDFParse } = require('pdf-parse');
+const pdfParse = require('pdf-parse');
 const Analysis = require('../models/Analysis');
 const https = require('https');
 
@@ -495,9 +495,7 @@ const analyzeResume = async (req, res) => {
     // 1. Extract text from PDF buffer
     const pdfBuffer = req.file.buffer;
     const fileSizeKb = (pdfBuffer.length / 1024).toFixed(1);
-    const uint8Array = new Uint8Array(pdfBuffer);
-    const parser = new PDFParse({ data: uint8Array });
-    const pdfData = await parser.getText();
+    const pdfData = await pdfParse(pdfBuffer);
     const resumeText = pdfData.text || '';
 
     const wordCount = resumeText.trim().split(/\s+/).filter(Boolean).length;
