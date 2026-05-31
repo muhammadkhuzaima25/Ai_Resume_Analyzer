@@ -187,11 +187,11 @@ npm run dev
   </tr>
   <tr>
     <td><b>Backend API</b></td>
-    <td><code>http://localhost:5000</code></td>
+    <td><code>https://resumatchai-three.vercel.app</code></td>
   </tr>
   <tr>
     <td><b>Frontend App</b></td>
-    <td><code>http://localhost:5173</code></td>
+    <td><code>https://resumatch-hub.vercel.app</code></td>
   </tr>
 </table>
 

@@ -5,7 +5,7 @@ const https = require('https');
 
 const MAX_KEYWORDS = 12;
 const OPENROUTER_MODEL = 'meta-llama/llama-3-70b-instruct:free';
-const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
+const BASE_URL = process.env.BASE_URL || 'https://resumatch-hub.vercel.app';
 
 function buildPrompt(jobDescription, resumeText) {
   const wordCount = (resumeText || '').trim().split(/\s+/).filter(Boolean).length;
