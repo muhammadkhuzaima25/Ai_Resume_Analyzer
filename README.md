@@ -30,6 +30,29 @@
 
 ---
 
+<h2> Live Demo</h2>
+
+<p align="center">
+  <table>
+    <tr>
+      <th align="center">Service</th>
+      <th align="center">URL</th>
+    </tr>
+    <tr>
+      <td align="center"><b>Frontend App</b></td>
+      <td align="center"><a href="https://resumatch-hub.vercel.app">resumatch-hub.vercel.app</a></td>
+    </tr>
+    <tr>
+      <td align="center"><b>Backend API</b></td>
+      <td align="center"><a href="https://resumatchai-three.vercel.app">resumatchai-three.vercel.app</a></td>
+    </tr>
+  </table>
+</p>
+
+<br>
+
+---
+
 <h2> Overview</h2>
 
 <p align="center">
@@ -133,8 +156,10 @@
 
 - <b>Node.js</b> 18+ (recommended: 20 LTS)
 - <b>MongoDB Atlas</b> account (free tier works)
-- <b>OpenRouter</b> API key 
-- <b>Google OAuth</b> client ID
+- <b>OpenRouter</b> API key
+- <b>Gemini API</b> key
+- <b>Google OAuth 2.0</b> client ID
+- <b>reCAPTCHA v3</b> site key & secret key
 
 <h3> Installation</h3>
 
@@ -163,6 +188,8 @@ GEMINI_API_KEY=your-gemini-api-key
 JWT_SECRET=your-random-jwt-secret
 GOOGLE_CLIENT_ID=your-google-client-id
 RECAPTCHA_SECRET_KEY=your-recaptcha-secret-key
+NODE_ENV=development
+BASE_URL=http://localhost:5173
 ```
 
 <p>Edit <code>frontend/.env</code> with your public keys:</p>
@@ -170,7 +197,7 @@ RECAPTCHA_SECRET_KEY=your-recaptcha-secret-key
 ```env
 VITE_GOOGLE_CLIENT_ID=your-google-client-id
 VITE_RECAPTCHA_SITE_KEY=your-recaptcha-site-key
-VITE_API_URL=
+VITE_API_URL=http://localhost:5000
 ```
 
 <h3> Run Development Servers</h3>
@@ -180,20 +207,10 @@ VITE_API_URL=
 npm run dev
 ```
 
-<table>
-  <tr>
-    <th>Service</th>
-    <th>URL</th>
-  </tr>
-  <tr>
-    <td><b>Backend API</b></td>
-    <td><code>https://resumatchai-three.vercel.app</code></td>
-  </tr>
-  <tr>
-    <td><b>Frontend App</b></td>
-    <td><code>https://resumatch-hub.vercel.app</code></td>
-  </tr>
-</table>
+| Service | URL |
+|---------|-----|
+| **Frontend** | `http://localhost:5173` |
+| **Backend API** | `http://localhost:5000` |
 
 <br>
 
@@ -205,32 +222,130 @@ npm run dev
 resumatch-analyzer/
 │
 ├── <b>backend/</b>
-│   ├── config/          # DB connection, email transporter
-│   ├── controllers/     # auth, analyze, contact logic
-│   ├── middleware/       # JWT authentication guard
-│   ├── models/          # User, Analysis, Contact schemas
-│   ├── routes/          # Express route definitions
-│   └── server.js        # Entry point
+│   ├── config/            # DB connection, email transporter
+│   │   ├── db.js
+│   │   └── email.js
+│   ├── controllers/       # Auth, analyze, contact business logic
+│   │   ├── authController.js
+│   │   ├── analyzeController.js
+│   │   └── contactController.js
+│   ├── middleware/         # JWT authentication guard
+│   │   └── authMiddleware.js
+│   ├── models/            # Mongoose schemas (User, Analysis, Contact)
+│   ├── routes/            # Express route definitions
+│   │   ├── authRoutes.js
+│   │   ├── analyzeRoutes.js
+│   │   └── contactRoutes.js
+│   ├── server.js          # Entry point
+│   ├── vercel.json        # Vercel deployment config
+│   ├── package.json
+│   └── .env.example
 │
 ├── <b>frontend/</b>
-│   ├── public/           # Static assets (favicon, icons)
+│   ├── public/            # Static assets (favicon)
 │   ├── src/
-│   │   ├── assets/       # Images, logos
-│   │   ├── components/   # Navbar, Footer, ProtectedRoute
-│   │   ├── pages/        # Analyze, History, Login, etc.
-│   │   ├── utils/        # Axios API client
+│   │   ├── assets/        # Images, logos
+│   │   ├── components/    # Navbar, Footer, ProtectedRoute
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   └── ProtectedRoute.jsx
+│   │   ├── pages/         # All route pages
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── Analyze.jsx
+│   │   │   ├── History.jsx
+│   │   │   ├── Home.jsx
+│   │   │   ├── Settings.jsx
+│   │   │   ├── SkillAnalytics.jsx
+│   │   │   ├── AtsTemplates.jsx
+│   │   │   ├── About.jsx
+│   │   │   └── Contact.jsx
+│   │   ├── utils/         # Axios API client
+│   │   │   └── api.js
 │   │   ├── App.jsx
 │   │   ├── main.jsx
 │   │   └── index.css
 │   ├── index.html
 │   ├── vite.config.js
-│   └── tailwind.config.js
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── eslint.config.js
+│   ├── package.json
+│   └── .env.example
 │
-├── <b>package.json</b>       # Root scripts (dev, install-all)
+├── <b>package.json</b>        # Root scripts (dev, install-all)
 ├── <b>.gitignore</b>
 ├── <b>LICENSE</b>
 └── <b>README.md</b>
 </pre>
+
+<br>
+
+---
+
+<h2> Deployment (Vercel)</h2>
+
+<h3> Prerequisites</h3>
+
+- A <a href="https://vercel.com">Vercel</a> account
+- <b>Frontend repo</b> or directory connected to Vercel
+- <b>Backend repo</b> or directory connected to Vercel
+- All environment variables set in Vercel dashboard
+
+<h3> Backend Deployment</h3>
+
+<p>The backend includes a <code>vercel.json</code> — it's ready to deploy as a <b>Serverless Function</b> on Vercel.</p>
+
+<ol>
+  <li>Push the <code>backend/</code> folder (or the whole repo) to a Git provider (GitHub, GitLab, Bitbucket).</li>
+  <li>In Vercel Dashboard → <b>Add New Project</b> → Import the repository.</li>
+  <li>Set <b>Root Directory</b> to <code>backend</code>.</li>
+  <li>Set <b>Framework Preset</b> → <code>Other</code>.</li>
+  <li>Add the following <b>Environment Variables</b>:</li>
+</ol>
+
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>.mongodb.net/resumatch?retryWrites=true&w=majority
+JWT_SECRET=your-jwt-secret
+OPENROUTER_API_KEY=sk-or-v1-your-key
+GEMINI_API_KEY=your-gemini-key
+GOOGLE_CLIENT_ID=your-google-client-id
+RECAPTCHA_SECRET_KEY=your-recaptcha-secret-key
+NODE_ENV=production
+BASE_URL=https://resumatch-hub.vercel.app
+```
+
+<p>After deployment, you'll get a URL like <code>https://resumatchai-three.vercel.app</code>.</p>
+
+<h3> Frontend Deployment</h3>
+
+<ol>
+  <li>In Vercel Dashboard → <b>Add New Project</b> → Import the same repository.</li>
+  <li>Set <b>Root Directory</b> to <code>frontend</code>.</li>
+  <li>Vercel will auto-detect <b>Vite</b> as the framework.</li>
+  <li>Add the following <b>Environment Variables</b>:</li>
+</ol>
+
+```env
+VITE_GOOGLE_CLIENT_ID=your-google-client-id
+VITE_RECAPTCHA_SITE_KEY=your-recaptcha-site-key
+VITE_API_URL=https://resumatchai-three.vercel.app
+```
+
+<p>After deployment, you'll get a URL like <code>https://resumatch-hub.vercel.app</code>.</p>
+
+<h3> Post-Deployment Steps</h3>
+
+<ol>
+  <li><b>Google OAuth:</b> In Google Cloud Console → Credentials → add these to your OAuth client:
+    <ul>
+      <li>Authorized JavaScript origins: <code>https://resumatch-hub.vercel.app</code></li>
+      <li>Authorized redirect URIs: <code>https://resumatch-hub.vercel.app</code></li>
+    </ul>
+  </li>
+  <li><b>MongoDB Atlas:</b> Add <code>0.0.0.0/0</code> (allow all) in Network Access — Vercel functions have dynamic IPs.</li>
+  <li><b>reCAPTCHA:</b> Add <code>https://resumatch-hub.vercel.app</code> to your reCAPTCHA v3 allowed domains.</li>
+</ol>
 
 <br>
 
